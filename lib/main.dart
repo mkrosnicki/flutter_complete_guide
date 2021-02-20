@@ -17,29 +17,44 @@ class _MyAppState extends State<MyApp> {
   final _questions = const [
     {
       'questionText': 'What\'s your favourite color?',
-      'answers': ['White', 'Blue', 'Red']
+      'answers': [
+        {'text': 'White', 'score': 10},
+        {'text': 'Blue', 'score': 20},
+        {'text': 'Red', 'score': 30}]
     },
     {
       'questionText': 'What\'s your favourite animal?',
-      'answers': ['Dog', 'Cat', 'Lion']
+      'answers': [
+        {'text': 'Dog', 'score': 30},
+        {'text': 'Cat', 'score': 20},
+        {'text': 'Lion', 'score': 10}
+        ]
     },
     {
       'questionText': 'What\'s your favourite dish?',
-      'answers': ['Pizza', 'Burger', 'Spaghetti']
+      'answers': [
+        {'text': 'Pizza', 'score': 30},
+        {'text': 'Burger', 'score': 20},
+        {'text': 'Spaghetti', 'score': 10}
+        ]
     },
   ];
 
   var _questionIndex = 0;
+  var _totalScore = 0;
 
-  void _answerQuestion() {
+  void _answerQuestion(int score) {
     setState(() {
-      print("Answer chosen!");
       _questionIndex++;
-      print(_questionIndex);
     });
-    if (_questionIndex < _questions.length) {
-      print('We have more questions!');
-    }
+    _totalScore += score;
+  }
+
+  void _resetQuiz() {
+    setState(() {
+      _questionIndex = 0;
+      _totalScore = 0;
+    });
   }
 
   @override
@@ -50,7 +65,7 @@ class _MyAppState extends State<MyApp> {
       appBar: AppBar(title: Text('My First App')),
       body: _questionIndex < _questions.length
           ? Quiz(answerQuestion: _answerQuestion, questions: _questions, questionIndex: _questionIndex,)
-          : Result(),
+          : Result(_totalScore, _resetQuiz),
     ));
   }
 }
