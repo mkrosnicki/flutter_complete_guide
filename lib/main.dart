@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_complete_guide/answer.dart';
-import './question.dart';
+import 'package:flutter_complete_guide/result.dart';
+
+import './quiz.dart';
 
 void main() => runApp(MyApp());
 
 class MyApp extends StatefulWidget {
-
   @override
   State<StatefulWidget> createState() {
     return _MyAppState();
@@ -13,6 +14,20 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  final _questions = const [
+    {
+      'questionText': 'What\'s your favourite color?',
+      'answers': ['White', 'Blue', 'Red']
+    },
+    {
+      'questionText': 'What\'s your favourite animal?',
+      'answers': ['Dog', 'Cat', 'Lion']
+    },
+    {
+      'questionText': 'What\'s your favourite dish?',
+      'answers': ['Pizza', 'Burger', 'Spaghetti']
+    },
+  ];
 
   var _questionIndex = 0;
 
@@ -22,38 +37,20 @@ class _MyAppState extends State<MyApp> {
       _questionIndex++;
       print(_questionIndex);
     });
+    if (_questionIndex < _questions.length) {
+      print('We have more questions!');
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    var questions = [
-      {
-        'questionText': 'What\'s your favourite color?',
-        'answers': ['White', 'Blue', 'Red']
-      },
-      {
-        'questionText': 'What\'s your favourite animal?',
-        'answers': ['Dog', 'Cat', 'Lion']
-      },
-      {
-        'questionText': 'What\'s your favourite dish?',
-        'answers': ['Pizza', 'Burger', 'Spaghetti']
-      },
-    ];
     // Scaffold() -> default main page
     return MaterialApp(
         home: Scaffold(
       appBar: AppBar(title: Text('My First App')),
-      body: Column(
-        children: [
-          Question(questions[_questionIndex]['questionText']),
-          ...(questions[_questionIndex]['answers'] as List<String>).map((answer) {
-            return Answer(answer, _answerQuestion);
-          }).toList(),
-        ],
-      ),
+      body: _questionIndex < _questions.length
+          ? Quiz(answerQuestion: _answerQuestion, questions: _questions, questionIndex: _questionIndex,)
+          : Result(),
     ));
   }
-
-
 }
